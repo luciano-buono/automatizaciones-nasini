@@ -29,12 +29,13 @@ def sort_id(line):
 
 
 #usa el ultimo archivo modificado como entrada
+name_of_file = 'OPCIONES.DAT'
 try:
-    list_of_files = glob.glob(r'*.DAT') # * means all if need specific format then *.csv
+    list_of_files = glob.glob(name_of_file)
     file = max(list_of_files, key=os.path.getmtime)
-    print(f"Leyendo archivo: {file}\n ")
+    print(f"Leyendo archivo: {file} ")
 except ValueError as err:
-    print(f"ERROR No hay .dat en el directorio actual (${os.getcwdb()})")
+    print(f"ERROR No hay {name_of_file} en el directorio actual ({os.getcwdb()})")
     sys.exit(1)
 
 
@@ -49,21 +50,31 @@ with open(file) as in_file, open(f'{out_file_name}-sorted{file_extension}', 'w')
     contents = in_file.readlines()
     contents.sort(key=sort_id)
 
+    print(f"{file} tiene {len(contents)} lineas\n")
+
     #Borrar los anteriores al delete_from
     delete_from = input("A partir de que ID borrar? (Vacio para no borrar)")
     delete_from_flag = True
+    amount_of_lines = 0
     for line in contents:
         if delete_from:
             if delete_from_flag:
-                print(f"Borrando desde: {delete_from}")
+                print(f"Borrando desde: {delete_from}\n")
                 delete_from_flag = False
             line_fields = line.strip().split('"')
             id = int(line_fields[0])
             if id> int(delete_from):
+                amount_of_lines += 1
                 out_file.write(f'{line}')
         else:
             if delete_from_flag:
-                print("No borrando nada")
+                print("No borrando nada\n")
                 delete_from_flag = False
             out_file.write(f'{line}')
 
+    if delete_from:
+        print(f"{out_file_name}-sorted{file_extension} tiene {amount_of_lines} lineas")
+    
+with open(f'{out_file_name}-sorted{file_extension}', 'r') as f:
+    last_line = f.readlines()[-1]
+    print(f"{out_file_name}-sorted{file_extension} ultima linea: {last_line}")

@@ -1,6 +1,7 @@
 #Toma un .csv como data y le modifica  "ClientAccountID" y "Exchange"
-#Toma el archivo.dat mas reciente de la carpeta donde se encuentra el
+#Toma el archivo.csv mas reciente de la carpeta donde se encuentra el
 #workspace, se puede modificas para que pida que archivo tomar
+
 
 from argparse import ArgumentParser
 import csv
@@ -14,7 +15,7 @@ import os, glob,sys
 
 #usa el ultimo archivo modificado como entrada
 try:
-    list_of_files = glob.glob(r'*.DAT') # * means all if need specific format then *.csv
+    list_of_files = glob.glob(r'*.csv') # * means all if need specific format then *.csv
     file = max(list_of_files, key=os.path.getmtime)
     print(f"Leyendo archivo: {file}\n ")
 except ValueError as err:
