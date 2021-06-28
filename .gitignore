@@ -1,3 +1,7 @@
 *.csv
 *.DAT
 .vscode
+*.xls
+*.xlsx
+*.ipynb
+.ipynb_checkpoints
