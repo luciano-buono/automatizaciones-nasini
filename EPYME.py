@@ -34,8 +34,8 @@ df2 = df[['CUIT','CUIT DEL COMITENTE','C','D','E','F','SUBCUENTA COMITENTE','FEC
 df2['CUIT'] = df['CUIT'].str.slice(stop=2)+'-'+df['CUIT'].str.slice(start=2, stop=-1)+'-'+df['CUIT'].str.slice(start=-1)
 df2['CUIT DEL COMITENTE']= df['CUIT DEL COMITENTE'].str.slice(stop=2)+'-'+df['CUIT DEL COMITENTE'].str.slice(start=2, stop=-1)+'-'+df['CUIT DEL COMITENTE'].str.slice(start=-1)
 # Pasamos las fechas al formato d/m/a
-df2['FECHA DE EMISION'] = pd.to_datetime(df2['FECHA DE EMISION']).dt.date
-df2['FECHA DE PAGO'] = pd.to_datetime(df2['FECHA DE PAGO']).dt.date
+df2['FECHA DE EMISION'] = pd.to_datetime(df2['FECHA DE EMISION'], dayfirst=True).dt.date
+df2['FECHA DE PAGO'] = pd.to_datetime(df2['FECHA DE PAGO'], dayfirst=True).dt.date
 df2['FECHA DE EMISION'] = pd.to_datetime(df2['FECHA DE EMISION']).dt.strftime('%d/%m/%Y')
 df2['FECHA DE PAGO'] = pd.to_datetime(df2['FECHA DE PAGO']).dt.strftime('%d/%m/%Y')
 #Agregamos columnas vacias al iniciio
