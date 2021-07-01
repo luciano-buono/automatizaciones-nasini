@@ -4,6 +4,9 @@ from numpy.lib.shape_base import column_stack
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
 
+#TODO
+
+##
 
 #usa el ultimo archivo modificado como entrada
 #Lee tantos xls como xlsx
@@ -44,8 +47,3 @@ df2 = df2.reindex(columns =  columnas +df2.columns.tolist())
 
 #Guardamos el csv
 df2.to_csv('EpymeExportado.csv', sep=';',header=False, index=False, decimal=',') #guarda en csv
-
-
-
-#TODO
-#ver fecha
