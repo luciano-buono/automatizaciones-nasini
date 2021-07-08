@@ -34,7 +34,7 @@ except ValueError as err:
     sys.exit(1)
 
 ##MAIN
-df = pd.read_excel(file)
+df = pd.read_excel(file, skiprows=1)
 df2 = df[df['Información'].str.contains("Subasta")]
 df3 = df2.groupby(['Cuenta']).sum()
 df4 = df3.reset_index()
