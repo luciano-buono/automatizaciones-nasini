@@ -16,7 +16,7 @@ import os, glob,sys
 #usa el ultimo archivo modificado como entrada
 file_extension = 'csv'
 try:
-    list_of_files = glob.glob(r'*.csv') # * means all if need specific format then *.csv
+    list_of_files = glob.glob(r'*.'+file_extension) # * means all if need specific format then *.csv
     file = max(list_of_files, key=os.path.getmtime)
     print(f"Leyendo archivo: {file}\n ")
     #Get the extension of file
