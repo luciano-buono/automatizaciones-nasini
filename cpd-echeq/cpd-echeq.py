@@ -37,7 +37,6 @@ except ValueError as err:
 df = pd.read_excel(file, skiprows=1)
 df2 = df[df['Información'].str.contains("Subasta")]
 df3 = df2.groupby(['Cuenta']).sum()
-df4 = df3.reset_index()
 #Guardamos el csv
 print(f'Output: {out_file_name}-edited.csv ')
-df4.to_csv(out_file_name+'-edited.csv', sep=';',header=True, index=False, decimal=',') #guarda en csv
+df3.to_csv(out_file_name+'-edited.csv', sep=';',header=True, index=True, decimal=',') #guarda en csv
