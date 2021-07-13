@@ -21,12 +21,14 @@ import pandas as pd
 #2) usa el ultimo archivo modificado como entrada. Acepta multiples formatos
 extensions_allowed = ['xls','xlsx']
 #Cant de inputs
-input_amount = ''
-input_amount = input("Cant de archivos de entrada? (Default:1)")
-if input_amount:
-    input_amount = int(input_amount)
-else:
+input_amount = 1
+#Comentar si solo es 1
+input_amount = input("Cant de archivos de entrada? (Default:1)") 
+if not input_amount:
     input_amount = 1
+else:
+    input_amount = int(input_amount)
+# -----
 list_of_files = []
 file, filename, file_extension = [], [], []
 try:
@@ -35,11 +37,10 @@ try:
         list_of_files += glob.glob(r'*.'+extensions_allowed[i])
     #Comprueba que input_amount no sea mayor al tamaño de la lista
     if input_amount > len(list_of_files):
-        print(f"No hay {input_amount} files en la carpeta {os.getcwdb()}")    
-        sys.exit(1)
+        print(f"Hay {len(list_of_files)} archivos en  {os.getcwdb()}")    
     #Sorted list of latest inputs
     sorted_files = sorted(list_of_files, key=os.path.getctime)
-    for i in range(input_amount):
+    for i in range(len(list_of_files)):
         file.append(sorted_files[-(i+1)])
         print(f"Leyendo archivo: {file[i]}\n ")
         #Get the extension of file and the root
@@ -51,13 +52,13 @@ except ValueError as err:
     sys.exit(1)
 
 #MAIN
-print(file[0])
+# print(file[0])
 df = pd.read_excel(file[0], skiprows=1)
 df2 = df[df['Información'].str.contains("Subasta")]
 df3 = df2.groupby(['Cuenta']).sum()
 #Segundo dataframe/archivo
 if input_amount > 1:
-    print(file[1])
+    # print(file[1])
     df4 = pd.read_excel(file[1], skiprows=1)
     df5 = df4[df4['Información'].str.contains("Subasta")]
     df6 = df5.groupby(['Cuenta']).sum()
