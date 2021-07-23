@@ -1,0 +1,37 @@
+Inputs:
+- CSV: Risk Manager "Cartera20210723"
+- XLSX: Aune>consulta de posición general "export - 2021-07-23T152241.834"
+- Dato: TC CEM https://www.rofex.com.ar/cem/Spot.aspx (entrar a Spot> tildar Dólar garantía ROFEX > ver) o por AP5 https://anywhereportfolio.com.ar
+- XLS: n° de cuentas (fijo) https://anywhereportfolio.com.ar/ "gvRegistryAccount" Solo nos interesa las columnas "Cuenta" y "Comitente CVSA"
+- XLSX:"Productos por moneda" (fijo) 
+
+Objetivo final: 
+Calcular el saldo por comitente y total pesificado sin tener en cuenta aquellos saldos positivos provenientes de diferencias y primas de productos con liquidación en USDL.
+
+Calculos:
+
+- Diferencias: 
+Filtrar "Listado de Productos con Interes Abierto, discriminado por comitente"
+Identificar si el "Producto" liquida en ARS o USDL (XLSX:"Productos por moneda")
+Suma por Comitente y moneda de liquidación "Dif. DÃ­a" (fila N)
+
+
+- Primas: 
+filtrar Listado de Portfolio detallado, discriminando segun origen: Portfolio Anterior (PA), operado en la Rueda (R) y operaciones Simuladas (S)
+Identificar si el Producto liquida en ARS o USDL (XLSX:"Productos por moneda")
+Suma por Comitente y moneda de liquidación "Primas" (fila L)
+
+
+- Stock USDL:
+Importar xlsx Aune>consulta de posición general
+Importar xls Cuentas AP5
+Filtrar fila Cuenta (B)- sumar stock pesificado (utilizando TC Dólar garantía Rofex - por API) + diferencias y primas en USDL - Mostrar si el saldo es negativo
+
+
+Total: 
+
+Diferencias + Primas + Stock USDL
+Mostrar por comitente y total
+
+
+

@@ -18,11 +18,11 @@ import os, glob, sys
 # file = parser.parse_args()
 
 #2) usa el ultimo archivo modificado como entrada. Acepta multiples formatos
-extensions_allowed = ['xls','xlsx']
+extensions_allowed = ['xls','xlsx','csv']
 #Cant de inputs
-input_amount = 1
+input_amount = 5
 #Comentar si solo es 1
-input_amount = input("Cant de archivos de entrada? (Default:1)") 
+# input_amount = input("Cant de archivos de entrada? (Default:1)") 
 if not input_amount:
     input_amount = 1
 else:
@@ -50,5 +50,31 @@ except ValueError as err:
     print(f"ERROR No hay {file_extension} en el directorio actual ({os.getcwdb()})")
     sys.exit(1)
 
-    
 ##MAIN
+# print(file[2])
+# file_cartera = csv.reader(file[2]) #Cartera.csv
+# print (file_cartera)
+# for l in file_cartera:
+#     print(l)
+#     #Otherwise, process data
+
+
+with open(file[2]) as file_cartera, open(f'{filename[2]}-sorted{file_extension[2]}', 'w') as file_cartera_output:
+    start = 0
+    end = 0
+    flag = False
+    reader = csv.reader(file_cartera, delimiter=';')
+    writer = csv.writer(file_cartera_output, delimiter= ';')
+    for row in reader:
+        # print(row)
+        if "Listado de Productos con Interes Abierto, discriminado por comitente" in row:
+            print (reader.line_num)
+            start = reader.line_num
+            flag = True
+        if flag:
+            print(row)
+            writer.writerow(row)
+            if not row:
+                end = reader.line_num
+                print (end)
+                break
