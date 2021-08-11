@@ -54,6 +54,7 @@ with open(file) as in_file, open(f'{out_file_name}-sorted{file_extension}', 'w')
 
     #Borrar los anteriores al delete_from
     delete_from = input("A partir de que ID borrar? (Vacio para no borrar)")
+    print('En caso de borrar, separa la salida en dos')
     delete_from_flag = True
     amount_of_lines = 0
     for line in contents:
@@ -75,6 +76,16 @@ with open(file) as in_file, open(f'{out_file_name}-sorted{file_extension}', 'w')
     if delete_from:
         print(f"{out_file_name}-sorted{file_extension} tiene {amount_of_lines} lineas")
     
-with open(f'{out_file_name}-sorted{file_extension}', 'r') as f:
-    last_line = f.readlines()[-1]
-    print(f"{out_file_name}-sorted{file_extension} ultima linea: {last_line}")
+with open(f'{out_file_name}-sorted{file_extension}', 'r') as f,\
+     open(f'{out_file_name}-1sorted{file_extension}','w') as f1,\
+         open(f'{out_file_name}-2sorted{file_extension}','w') as f2:
+    #Lo parto a la mitad
+    contents = f.readlines()
+    print(amount_of_lines)
+    for i,line in enumerate(contents):
+        if i < amount_of_lines/2:
+            f1.write(f'{line}')
+        if i >= amount_of_lines/2:
+            f2.write(f'{line}')
+        if i == amount_of_lines-1:
+            print(f"{out_file_name}-sorted{file_extension} ultima linea: {line}")
