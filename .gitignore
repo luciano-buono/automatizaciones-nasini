@@ -4,5 +4,7 @@
 *.xls
 *.xlsx
 *.ipynb
+# Except for jupyter in aune-riskmanager
+!aune-riskmanager/*.ipynb
 .ipynb_checkpoints
 .~lock.reporte_cartera_echecks_ (5).xls#

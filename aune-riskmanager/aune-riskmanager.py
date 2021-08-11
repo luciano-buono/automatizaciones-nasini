@@ -1,14 +1,13 @@
-##DESCRIPCION
-#El script toma un .dat donde los campos estan separados por comillas (")
-#y luego organiza cada linea en base al parametro pasado (tiempo,acciones,
-#ID,comitente)
-#Toma el archivo.dat mas reciente de la carpeta donde se encuentra el
-#workspace, se puede modificas para que pida que archivo tomar
+#DESCRIPCION
+# Trabajo en pandas para facilitar 
+# la suma de primas diferencias de riskmanager y datos de aune
+
 
 ##IMPORTS
 from argparse import ArgumentParser
 import csv
 import os, glob, sys
+import pandas as pd
 
 ##INPUTS
 
@@ -50,31 +49,71 @@ except ValueError as err:
     print(f"ERROR No hay {file_extension} en el directorio actual ({os.getcwdb()})")
     sys.exit(1)
 
+#Ordenamos los archivos
+file_sorted = []
+filename_sorted = []
+for f in file:
+    if 'Productos por moneda' in f:
+        file_sorted.append(f)
+        filename_sorted.append(os.path.splitext(f)[0])
+for f in file:
+    if 'Cartera' in f:
+        file_sorted.append(f)
+        filename_sorted.append(os.path.splitext(f)[0])
+for f in file:
+    if 'export -' in f:
+        file_sorted.append(f)
+        filename_sorted.append(os.path.splitext(f)[0])
+for f in file:
+    if 'gvRegistryAccount' in f:
+        file_sorted.append(f)
+        filename_sorted.append(os.path.splitext(f)[0])
+#Revisamos orden
+for f in file_sorted:
+    print (f)
+
 ##MAIN
-# print(file[2])
-# file_cartera = csv.reader(file[2]) #Cartera.csv
-# print (file_cartera)
-# for l in file_cartera:
-#     print(l)
-#     #Otherwise, process data
-
-
-with open(file[2]) as file_cartera, open(f'{filename[2]}-sorted{file_extension[2]}', 'w') as file_cartera_output:
-    start = 0
-    end = 0
-    flag = False
+#Leemos el archivo traido de AUNE y sacamos Tabla Diferencias Tabla Primas
+with open(file[1]) as file_cartera, \
+        open(f'diferencias{file_extension[1]}', 'w', newline='') as file_cartera_diferencias,\
+        open(f'primas{file_extension[1]}', 'w', newline='') as file_cartera_primas:
+    start1 = 0
+    end1 = 0
+    flag1 = False
     reader = csv.reader(file_cartera, delimiter=';')
-    writer = csv.writer(file_cartera_output, delimiter= ';')
-    for row in reader:
-        # print(row)
+    orders = list(reader)
+    writer = csv.writer(file_cartera_diferencias, delimiter= ';')
+    for row in orders:
+        #Busco la tabla de Diferencias
         if "Listado de Productos con Interes Abierto, discriminado por comitente" in row:
-            print (reader.line_num)
-            start = reader.line_num
-            flag = True
-        if flag:
-            print(row)
+            # print (reader.line_num)
+            start1 = reader.line_num
+            flag1 = True
+        if flag1:
+            # print(row)
             writer.writerow(row)
             if not row:
                 end = reader.line_num
-                print (end)
+                # print (end)
                 break
+    #Leemos el archivo y sacamos Primas    
+    start2 = 0
+    end2 = 0
+    flag2 = False    
+    reader2 = csv.reader(file_cartera, delimiter=';')
+    writer2 = csv.writer(file_cartera_primas, delimiter= ';')
+    for row in orders:
+        #Busco la tabla de Diferencias
+        if "Listado de Portfolio detallado, discriminando segun origen: Portfolio Anterior (PA), operado en la Rueda (R) y operaciones Simuladas (S)" in row:
+            # print (reader2.line_num)
+            start2 = reader2.line_num
+            flag2 = True
+        if flag2:
+            # print(row)
+            writer2.writerow(row)
+            if not row:
+                end = reader2.line_num
+                # print (end)
+                break
+
+#-----------Comienzo de procesado de datos con pandas-----------------#
