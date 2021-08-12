@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 #DESCRIPCION
 # Trabajo en pandas para facilitar 
 # la suma de primas diferencias de riskmanager y datos de aune
@@ -13,10 +7,6 @@ from argparse import ArgumentParser
 import csv
 import os, glob, sys
 import pandas as pd
-
-
-# In[2]:
-
 
 ##INPUTS
 
@@ -88,11 +78,13 @@ for f in file_sorted:
 
 ##MAIN
 #Leemos el archivo traido de AUNE y sacamos Tabla Diferencias Tabla Primas
-with open(file_sorted[1]) as file_cartera,         open(f'diferencias{file_extension_sorted[1]}', 'w', newline='') as file_cartera_diferencias,        open(f'primas{file_extension_sorted[1]}', 'w', newline='') as file_cartera_primas:
+with open(file_sorted[1]) as file_cartera, \
+        open(f'diferencias{file_extension_sorted[1]}', 'w', newline='') as file_cartera_diferencias,\
+        open(f'primas{file_extension_sorted[1]}', 'w', newline='') as file_cartera_primas:
     start1 = 0
     end1 = 0
     flag1 = False
-#     print(file_cartera)
+    print(file_cartera)
     reader = csv.reader(file_cartera, delimiter=';')
     orders = list(reader)
     writer = csv.writer(file_cartera_diferencias, delimiter= ';')
@@ -130,11 +122,6 @@ with open(file_sorted[1]) as file_cartera,         open(f'diferencias{file_exten
                 break
 
 #-----------Comienzo de procesado de datos con pandas-----------------#
-
-
-# In[3]:
-
-
 # Tabla Diferencias. Suma por Comitente y moneda de liquidación "Dif. DÃ­a" (fila N)
 
 #Leemos la tabla sacada arriba con pandas
@@ -146,10 +133,6 @@ mergedStuff = pd.merge(df, df2, on=['Producto'], how='inner')
 #Sumamos por comitenente y moneda
 df_diferencias = mergedStuff.groupby(['Comitente','Moneda de liquidación '],as_index=False)[['Dif. Día']].sum()
 
-
-# In[4]:
-
-
 # Tabla Primas. Suma por Comitente y moneda de liquidación "Primas" (fila L)
 
 file3 = "primas.csv"
@@ -160,20 +143,12 @@ mergedStuff = pd.merge(df, df2, on=['Producto'], how='inner')
 #Sumamos por comitenente y moneda
 df_primas = mergedStuff.groupby(['Comitente','Moneda de liquidación '],as_index=False)[['Primas']].sum()
 
-
-# In[5]:
-
-
 #Leer gvRegistryAccount.xls. Archivo de AP5
 #Skipeamos 1 linea porque aune siempre tiene la 1linea vacia
 
-file6 = file_sorted[3]
+file6 = "gvRegistryAccount.xls"
 df_ap5 = pd.read_excel(file6)
 df_ap5_slim = df_ap5[['Cuenta', 'Comitente CVSA']]
-
-
-# In[6]:
-
 
 #Leer export - 2021-07-23T152241.834.xlsx. Archivo de AUNE
 #Skipeamos 1 linea porque aune siempre tiene la 1linea vacia
@@ -187,17 +162,11 @@ df_aune['Comitente CVSA'] =  df_aune.Cuenta.str.extract('.*\[(.*)\].*')
 #Pasamos CVSA a float para poder hacer el merge
 df_aune["Comitente CVSA"] = pd.to_numeric(df_aune["Comitente CVSA"])
 #Valor de USD Garantia ROFEX. Ver como obtenerlo automaticamente no hardcodeado
-USD_Rofex = float(input("Ingrese valor USD Garantia ROFEX"))
-#Necesito el opuesto de los valores, multiplico por -1
-INVERTIR_SIGNO = -1
-df_aune['Aune Total Pesificado'] = df_aune['Total']*USD_Rofex*INVERTIR_SIGNO
+USD_Rofex = -96.7100
+df_aune['Aune Total Pesificado'] = df_aune['Total']*USD_Rofex
 # Solo dejamos las dos columnas que necesitamos
 df_aune_slim = df_aune[['Comitente CVSA', 'Aune Total Pesificado']]
 df_aune_slim
-
-
-# In[7]:
-
 
 #Merge Diferencias y Primas por Comitente y Moneda.
 mergedStuff = pd.merge(df_diferencias, df_primas, on=['Comitente','Moneda de liquidación '], how='inner')
@@ -205,25 +174,13 @@ mergedStuff = pd.merge(df_diferencias, df_primas, on=['Comitente','Moneda de liq
 mergedStuff = mergedStuff.rename(columns={"Comitente": "Cuenta"})
 mergedStuff
 
-
-# In[8]:
-
-
 #Correlacionamos los comitenes de AP5 a su numero en AUNE
 mergedStuff3 = pd.merge(mergedStuff,df_ap5_slim, on=['Cuenta'], how='inner')
 mergedStuff3
 
-
-# In[9]:
-
-
 #Separamos la tabla entre ARS y USDL
 mergedStuff3_ars = mergedStuff3[mergedStuff3['Moneda de liquidación '] == 'ARS']
 mergedStuff3_usdl = mergedStuff3[mergedStuff3['Moneda de liquidación '] == 'USDL']
-
-
-# In[10]:
-
 
 #Merge tabla de USDL coon aune-slim
 mergedStuff4 = pd.merge(mergedStuff3_usdl,df_aune_slim, on=['Comitente CVSA'], how='outer')
@@ -231,15 +188,9 @@ mergedStuff4 = pd.merge(mergedStuff3_usdl,df_aune_slim, on=['Comitente CVSA'], h
 mergedStuff4 = mergedStuff4.fillna(0)
 
 
-# In[11]:
-
-
 # Hacemos el total
 mergedStuff4['Super Total'] = mergedStuff4['Dif. Día']+mergedStuff4['Primas']+mergedStuff4['Aune Total Pesificado']
 mergedStuff4
-
-
-# In[12]:
 
 
 #Hacemos 0 los positivos del Super Total
@@ -250,18 +201,11 @@ for i in mergedStuff4.iloc[:,mergedStuff4.columns.get_loc("Super Total"):mergedS
 mergedStuff4
 
 
-# In[13]:
-
-
 #Agarramos los ARS de Diferencias y Primas
 mergedStuff3_ars = mergedStuff3_ars.rename(columns={"Dif. Día": "Dif. Día ars", "Primas": "Primas ars"})
 mergedStuff3_ars
 mergedStuff3_ars = mergedStuff3_ars[['Comitente CVSA', 'Dif. Día ars', 'Primas ars']]
 mergedStuff3_ars
-
-
-# In[14]:
-
 
 #Agregamos las columnas de Dif. Día ars y Primas ars
 mergedStuff5 = pd.merge(mergedStuff3_ars, mergedStuff4, on=['Comitente CVSA'], how='outer')
@@ -269,39 +213,7 @@ mergedStuff5 = mergedStuff5.fillna(0)
 mergedStuff5
 
 
-# In[15]:
-
-
 #Sumamos a Super Total los Dif. Día ars	Primas ars
 mergedStuff5['Super Total'] = mergedStuff5['Dif. Día ars'] + mergedStuff5['Primas ars'] + mergedStuff5['Super Total']
 
 mergedStuff5
-
-
-# In[24]:
-
-
-#Saco columnas innecesarias
-df_final = mergedStuff5[['Comitente CVSA','Super Total']]
-df_final
-
-
-# In[31]:
-
-
-df_final= df_final[df_final !=0]
-df_final = df_final.dropna()
-df_final
-
-
-# In[20]:
-
-
-df_final.to_csv('resumen_de_cuenta.csv', sep=';',header=True, index=False, decimal=',')
-
-
-# In[32]:
-
-
-print("Total:",df_final['Super Total'].sum())
-
