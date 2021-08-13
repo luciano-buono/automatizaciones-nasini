@@ -83,8 +83,8 @@ for f in file:
         filename_sorted.append(os.path.splitext(f)[0])
         file_extension_sorted.append(os.path.splitext(f)[1])
 #Revisamos orden
-for f in file_sorted:
-    print (f)
+# for f in file_sorted:
+#     print (f)
 
 ##MAIN
 #Leemos el archivo traido de AUNE y sacamos Tabla Diferencias Tabla Primas
@@ -187,7 +187,7 @@ df_aune['Comitente CVSA'] =  df_aune.Cuenta.str.extract('.*\[(.*)\].*')
 #Pasamos CVSA a float para poder hacer el merge
 df_aune["Comitente CVSA"] = pd.to_numeric(df_aune["Comitente CVSA"])
 #Valor de USD Garantia ROFEX. Ver como obtenerlo automaticamente no hardcodeado
-USD_Rofex = float(input("Ingrese valor USD Garantia ROFEX"))
+USD_Rofex = float(input("Ingrese valor USD Garantia ROFEX: "))
 #Necesito el opuesto de los valores, multiplico por -1
 INVERTIR_SIGNO = -1
 df_aune['Aune Total Pesificado'] = df_aune['Total']*USD_Rofex*INVERTIR_SIGNO
