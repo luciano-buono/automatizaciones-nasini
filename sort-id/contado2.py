@@ -13,13 +13,13 @@ def sort_id(line):
     line_fields = line.strip().split('"')
     # print(line_fields)
     #Sort by ID
-    id = int(line_fields[0])
+    id = int(line_fields[1])
     #Sort by time
-    time = int(line_fields[6])
+    time = int(line_fields[5])
     #Sort by shares
-    share = line_fields[3]
+    share = line_fields[2]
     #Sort by comietente
-    comitente = line_fields[8]
+    comitente = line_fields[7]
     return id
 
 #Pide input file y genera el outfile name
@@ -29,13 +29,13 @@ def sort_id(line):
 
 
 #usa el ultimo archivo modificado como entrada
-name_of_file = 'SINACNORR.DAT'
+name_of_file = 'RUEDANOR.DAT'
 try:
     list_of_files = glob.glob(name_of_file)
     file = max(list_of_files, key=os.path.getmtime)
     print(f"Leyendo archivo: {file} ")
 except ValueError as err:
-    print(f"ERROR No hay {name_of_file} en el directorio actual ({os.getcwdb().decode('utf-8')})")
+    print(f"ERROR No hay {name_of_file} en el directorio actual ({os.getcwdb()})")
     sys.exit(1)
 
 
