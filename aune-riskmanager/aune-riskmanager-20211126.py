@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[11]:
 
 
 #DESCRIPCION
@@ -16,7 +16,7 @@ import pandas as pd
 from pathlib import Path
 
 
-# In[2]:
+# In[12]:
 
 
 def load_files():
@@ -49,7 +49,7 @@ def process_aune(file, output_file, keyword):
 
 
 
-# In[3]:
+# In[13]:
 
 
 def diferencias(file,file2):
@@ -65,7 +65,7 @@ def diferencias(file,file2):
     return df_diferencias
 
 def primas(file,file2):
-    # Tabla Diferencias. Suma por Comitente y moneda de liquidación "Dif. DÃ­a" (fila N)
+    # Tabla Primas. Suma por Comitente y moneda de liquidación "Dif. DÃ­a" (fila N)
     #Leemos la tabla sacada arriba con pandas
     if (not file) or (not file2):
         return "File not found"
@@ -73,11 +73,11 @@ def primas(file,file2):
     df2 = pd.read_excel(file2)
     mergedStuff = pd.merge(df, df2, on=['Producto'], how='inner')
     #Sumamos por comitenente y moneda
-    df_primas = mergedStuff.groupby(['Comitente','Moneda de liquidación '],as_index=False)[['Primas']].sum()
+    df_primas = mergedStuff.groupby(['Comitente','Moneda de liquidación '],as_index=False)[['Primas Día']].sum()
     return df_primas
 
 
-# In[4]:
+# In[21]:
 
 
 def gvRegistryAccount(file):
@@ -86,11 +86,12 @@ def gvRegistryAccount(file):
     if (not file):
         return "File not found"
     df = pd.read_excel(file)
-    df2 = df[['Cuenta', 'Comitente CVSA']]
-    return df2
+    df = df[df["Estado"]=="Activo"]
+    df = df[['Cuenta', 'Comitente CVSA']]
+    return df
 
 
-# In[5]:
+# In[22]:
 
 
 def aune(file):
@@ -113,7 +114,7 @@ def aune(file):
     return df_aune_slim
 
 
-# In[6]:
+# In[19]:
 
 
 def mergeDFs(df_diferencias,df_primas,gvRegistryAccount, df_aune):
@@ -135,7 +136,7 @@ def mergeDFs(df_diferencias,df_primas,gvRegistryAccount, df_aune):
     mergedStuff4 = mergedStuff4.fillna(0)
     
     # Hacemos el total
-    mergedStuff4['Super Total'] = mergedStuff4['Dif. Día']+mergedStuff4['Primas']+mergedStuff4['Aune Total Pesificado']
+    mergedStuff4['Super Total'] = mergedStuff4['Dif. Día']+mergedStuff4['Primas Día']+mergedStuff4['Aune Total Pesificado']
     mergedStuff4
     
     #Hacemos 0 los positivos del Super Total
@@ -146,7 +147,7 @@ def mergeDFs(df_diferencias,df_primas,gvRegistryAccount, df_aune):
     mergedStuff4
     
     #Agarramos los ARS de Diferencias y Primas
-    mergedStuff3_ars = mergedStuff3_ars.rename(columns={"Dif. Día": "Dif. Día ars", "Primas": "Primas ars"})
+    mergedStuff3_ars = mergedStuff3_ars.rename(columns={"Dif. Día": "Dif. Día ars", "Primas Día": "Primas ars"})
     mergedStuff3_ars
     mergedStuff3_ars = mergedStuff3_ars[['Comitente CVSA', 'Dif. Día ars', 'Primas ars']]
     mergedStuff3_ars
@@ -167,13 +168,13 @@ def mergeDFs(df_diferencias,df_primas,gvRegistryAccount, df_aune):
     return df_final
 
 
-# In[7]:
+# In[17]:
 
 
 def remove_GELD(df_final):
     #Eliminar los comitentes de GELD de df_final
     # AUNE	Codigo Cuenta
-    COMITENTES_GELD= [10187,10188,10195,10122,10305]
+    COMITENTES_GELD= [10187,10188,10195,10196,10122,10305,10121,10123]
     df_final_bool =df_final.isin({'Comitente CVSA': COMITENTES_GELD})
     REMOVE_GELD = df_final_bool.index[df_final_bool["Comitente CVSA"]].tolist()
     df_final = df_final.drop(REMOVE_GELD)
@@ -182,13 +183,13 @@ def remove_GELD(df_final):
     return df_final
 
 
-# In[8]:
+# In[23]:
 
 
 files = load_files()
 print(files)
 process_aune(select_file(files, 'Cartera'),"diferencias","Listado de Productos con Interes Abierto, discriminado por comitente")   
-process_aune(select_file(files, 'Cartera'),"primas","Listado de Posiciones abiertas, discriminado por comitente")    
+process_aune(select_file(files, 'Cartera'),"primas","Listado de Productos con Interes Abierto, discriminado por comitente")    
 df_diferencias = diferencias(select_file(files, 'diferencias'),select_file(files, 'Productos por moneda'))
 df_primas = primas(select_file(files, 'primas'),select_file(files, 'Productos por moneda'))
 gvRegistryAccount = gvRegistryAccount(select_file(files, 'gvRegistry'))
