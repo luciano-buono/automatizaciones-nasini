@@ -76,16 +76,44 @@ with open(file) as in_file, open(f'{out_file_name}-sorted{file_extension}', 'w')
     if delete_from:
         print(f"{out_file_name}-sorted{file_extension} tiene {amount_of_lines} lineas")
     
-with open(f'{out_file_name}-sorted{file_extension}', 'r') as f,\
-     open(f'{out_file_name}-1sorted{file_extension}','w') as f1,\
-         open(f'{out_file_name}-2sorted{file_extension}','w') as f2:
-    #Lo parto a la mitad
-    contents = f.readlines()
-    print(amount_of_lines)
-    for i,line in enumerate(contents):
-        if i < amount_of_lines/2:
-            f1.write(f'{line}')
-        if i >= amount_of_lines/2:
-            f2.write(f'{line}')
-        if i == amount_of_lines-1:
-            print(f"{out_file_name}-sorted{file_extension} ultima linea: {line}")
+# with open(f'{out_file_name}-sorted{file_extension}', 'r') as f,\
+#      open(f'{out_file_name}-1sorted{file_extension}','w') as f1,\
+#          open(f'{out_file_name}-2sorted{file_extension}','w') as f2:
+#     #Lo parto a la mitad
+#     contents = f.readlines()
+#     print(amount_of_lines)
+#     for i,line in enumerate(contents):
+#         if i < amount_of_lines/2:
+#             f1.write(f'{line}')
+#         if i >= amount_of_lines/2:
+#             f2.write(f'{line}')
+#         if i == amount_of_lines-1:
+#             print(f"{out_file_name}-sorted{file_extension} ultima linea: {line}")
+
+
+
+def split_file():
+    splitLen = 2000         # X lines per file
+    outputBase = f'{out_file_name}-sorted' # output.1.txt, output.2.txt, etc.
+
+    # This is shorthand and not friendly with memory
+    # on very large files (Sean Cavanagh), but it works.
+    input = open(f'{out_file_name}-sorted{file_extension}', 'r').read().split('\n')
+
+    at = 1
+    for lines in range(0, len(input), splitLen):
+        # First, get the list slice
+        outputData = input[lines:lines+splitLen]
+
+        # Now open the output file, join the new slice with newlines
+        # and write it out. Then close the file.
+        output = open(outputBase + str(at) + '.DAT', 'w')
+        output.write('\n'.join(outputData))
+        output.close()
+
+        # Increment the counter
+        at += 1
+
+
+
+split_file()

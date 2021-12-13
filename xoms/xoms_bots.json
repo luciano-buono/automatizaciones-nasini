@@ -1,0 +1,138 @@
+{
+    "account": "",
+    "credits": [
+        {
+            "account": 10024.0,
+            "currency": "ARS",
+            "amount": 3554684.7199999997,
+            "settlType": 0
+        },
+        {
+            "account": 10025.0,
+            "currency": "ARS",
+            "amount": 6135200.91,
+            "settlType": 0
+        },
+        {
+            "account": 10026.0,
+            "currency": "ARS",
+            "amount": 19600865.0,
+            "settlType": 0
+        },
+        {
+            "account": 10070.0,
+            "currency": "ARS",
+            "amount": 11942362.7,
+            "settlType": 0
+        },
+        {
+            "account": 10071.0,
+            "currency": "ARS",
+            "amount": 5836477.5,
+            "settlType": 0
+        },
+        {
+            "account": 10072.0,
+            "currency": "ARS",
+            "amount": 5140790.41,
+            "settlType": 0
+        },
+        {
+            "account": 10082.0,
+            "currency": "ARS",
+            "amount": 5013189.65,
+            "settlType": 0
+        },
+        {
+            "account": 10083.0,
+            "currency": "ARS",
+            "amount": 4202988.14,
+            "settlType": 0
+        },
+        {
+            "account": 10084.0,
+            "currency": "ARS",
+            "amount": 4588587.82133365,
+            "settlType": 0
+        },
+        {
+            "account": 10121.0,
+            "currency": "ARS",
+            "amount": 680327.630515,
+            "settlType": 0
+        },
+        {
+            "account": 10122.0,
+            "currency": "ARS",
+            "amount": 736898.980515,
+            "settlType": 0
+        },
+        {
+            "account": 10143.0,
+            "currency": "ARS",
+            "amount": 3475893.16,
+            "settlType": 0
+        },
+        {
+            "account": 10144.0,
+            "currency": "ARS",
+            "amount": 4351280.13,
+            "settlType": 0
+        },
+        {
+            "account": 10151.0,
+            "currency": "ARS",
+            "amount": 5829738.140000001,
+            "settlType": 0
+        },
+        {
+            "account": 10152.0,
+            "currency": "ARS",
+            "amount": 3559064.66,
+            "settlType": 0
+        },
+        {
+            "account": 10240.0,
+            "currency": "ARS",
+            "amount": 1479447.69,
+            "settlType": 0
+        },
+        {
+            "account": 10263.0,
+            "currency": "ARS",
+            "amount": 65410.03,
+            "settlType": 0
+        },
+        {
+            "account": 8874.0,
+            "currency": "ARS",
+            "amount": 7841488.73,
+            "settlType": 0
+        },
+        {
+            "account": 9648.0,
+            "currency": "ARS",
+            "amount": 48490.76,
+            "settlType": 0
+        },
+        {
+            "account": 9732.0,
+            "currency": "ARS",
+            "amount": 1197222.48,
+            "settlType": 0
+        },
+        {
+            "account": 9793.0,
+            "currency": "ARS",
+            "amount": 9352775.190000001,
+            "settlType": 0
+        },
+        {
+            "account": 9899.0,
+            "currency": "ARS",
+            "amount": 3640962.42,
+            "settlType": 0
+        }
+    ],
+    "keepPrevious": false
+}
