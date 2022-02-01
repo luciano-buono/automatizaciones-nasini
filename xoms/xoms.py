@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[28]:
+# In[29]:
 
 
 #Bajar el .csv de XOMS
@@ -50,10 +50,10 @@ def create_file(mergedStuff):
     xoms= {
         "account": "",
         "credits":[],
-        "keepPrevious": False,
+        "keepPrevious": True,
     }
     for index, row in mergedStuff.iterrows():
-        account_value = row['Cuenta']
+        account_value = int(row['Cuenta'])
         amount_value= row['resta']
         xoms_account = {
             "account": account_value,
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     main()
 
 
-# In[29]:
+# In[30]:
 
 
 files = load_files()
